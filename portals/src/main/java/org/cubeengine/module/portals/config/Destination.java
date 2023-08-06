@@ -68,7 +68,7 @@ public class Destination
     {
         ServerLocation loc;
         Vector3d rotation = null;
-        final ServerWorld world = this.world.getWorld();
+
         switch (type)
         {
         case PORTAL:
@@ -84,17 +84,21 @@ public class Destination
             loc = destPortal.getPortalPos();
             rotation = destPortal.getPortalRot();
             break;
-        case WORLD:
+        case WORLD: {
+            final ServerWorld world = this.world.getWorld();
             loc = world.location(world.properties().spawnPosition()).add(0.5, 0, 0.5);
             break;
-        case LOCATION:
-            if (this.position == null)
-            {
-                return;
+        }
+        case LOCATION: {
+                final ServerWorld world = this.world.getWorld();
+                if (this.position == null)
+                {
+                    return;
+                }
+                loc = world.location(this.position);
+                rotation = this.rotation;
+                break;
             }
-            loc = world.location(this.position);
-            rotation = this.rotation;
-            break;
         default:
             throw new IllegalStateException();
         }
